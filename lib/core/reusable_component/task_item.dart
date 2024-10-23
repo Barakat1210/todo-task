@@ -12,36 +12,33 @@ class TaskItem extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
-        color: Colors.white,
+        color: Theme.of(context).indicatorColor,
       ),
-
-      margin: EdgeInsets.symmetric(vertical: 12,horizontal: 8),
+      margin: EdgeInsets.symmetric(vertical: 12, horizontal: 8),
       child: Slidable(
-        startActionPane:  ActionPane(
+        startActionPane: ActionPane(
           extentRatio: 0.3,
           motion: const DrawerMotion(),
-      children:[
-      SlidableAction(
-        autoClose: true,
-        borderRadius: BorderRadius.circular(15),
-        onPressed:(context){},
-      backgroundColor: Color(0xFFFE4A49),
-      foregroundColor: Colors.white,
-      icon: Icons.delete,
-      label: 'Delete',
-      ),
-      ],
-      ),
+          children: [
+            SlidableAction(
+              autoClose: true,
+              borderRadius: BorderRadius.circular(15),
+              onPressed: (context) {},
+              backgroundColor: Color(0xFFFE4A49),
+              foregroundColor: Colors.white,
+              icon: Icons.delete,
+              label: 'Delete',
+            ),
+          ],
+        ),
         endActionPane: ActionPane(
           extentRatio: 0.3,
           motion: const DrawerMotion(),
-
-
-          children:[
+          children: [
             SlidableAction(
               borderRadius: BorderRadius.circular(15),
               flex: 1,
-              onPressed:(context){},
+              onPressed: (context) {},
               backgroundColor: Color(0xFFFE4A49),
               foregroundColor: Theme.of(context).primaryColor,
               icon: Icons.edit,
@@ -51,7 +48,7 @@ class TaskItem extends StatelessWidget {
         ),
         child: Card(
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 12,horizontal: 8),
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -60,32 +57,40 @@ class TaskItem extends StatelessWidget {
                   height: 65,
                   width: 3,
                 ),
-                SizedBox(width: 25,),
+                SizedBox(
+                  width: 25,
+                ),
                 Column(
                   children: [
-                    Text(
-                      StringsManager.taskTitle,
-                      style: MyTextStyles.cardTitleTextStyle
+                    Text(StringsManager.taskTitle,
+                        style: AppLightStyles.cardTitleTextStyle),
+                    SizedBox(
+                      height: 12,
                     ),
-                    SizedBox(height: 12,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Icon(Icons.punch_clock,),
-                        Text('10:30',style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.black)),
-                      ],
+                        Icon(
+                          Icons.punch_clock,
+                        ),
+                        Text('10:30',
+                            style: AppLightStyles.DateStyle,
+                        ),],
                     ),
                   ],
                 ),
                 Spacer(),
                 Container(
-                  padding: EdgeInsets.symmetric(vertical: 2,horizontal: 12),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.circular(10),
-
-                  ),
-                    child: Icon(Icons.check,color: ColorsManager.whiteColor,size: 28,)),
+                    padding: EdgeInsets.symmetric(vertical: 2, horizontal: 12),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Icon(
+                      Icons.check,
+                      color: ColorsManager.whiteColor,
+                      size: 28,
+                    )),
               ],
             ),
           ),

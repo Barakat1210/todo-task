@@ -10,8 +10,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       onGenerateRoute:RoutesManager.router ,
       initialRoute:RoutesManager.homeRoute ,
-      theme:MyTheme.lightTheme ,
-      themeMode:ThemeMode.light ,
+      theme:MyTheme.light ,
+      darkTheme:MyTheme.dark ,
+      themeMode:ThemeMode.dark ,
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:todo_app/core/my_text_styles.dart';
 
 import '../../../../core/strings_manager.dart';
 
@@ -11,8 +12,8 @@ class SettingsTab extends StatefulWidget {
 }
 
 class _SettingsTabState extends State<SettingsTab> {
-  String? selectedTheme ;
-  String? selectedLanguage ;
+  String? selectedTheme ='Light';
+  String? selectedLanguage='English' ;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,7 @@ class _SettingsTabState extends State<SettingsTab> {
         children: [
           Text(
             StringsManager.theme,
-            style: Theme.of(context).textTheme.labelSmall,
+            style:AppLightStyles.settingsItemLabelTextStyle,
           ),
           SizedBox(
             height: 17,
@@ -43,18 +44,13 @@ class _SettingsTabState extends State<SettingsTab> {
               children: [
                 Text(
                   selectedTheme ?? '',
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                    fontWeight: FontWeight.w400,
-                    color: Theme.of(context).primaryColor,
-                  ),
+                  style: AppLightStyles.itemViewStyle,
                 ),
                 Spacer(),
                 DropdownButton<String>(
-                  style: GoogleFonts.poppins(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w400,
-                    fontSize: 18,
-                  ),
+                  iconDisabledColor: Colors.transparent,
+                  iconEnabledColor: Colors.black,
+                  style:AppLightStyles.dropDownItemStyle,
                   elevation: 0,
                   padding: EdgeInsets.all(0),
                   isExpanded: false,
@@ -65,7 +61,7 @@ class _SettingsTabState extends State<SettingsTab> {
                   ].map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
-                      child: Text(value),
+                      child: Text(value,style: AppLightStyles.dropDownItemStyle,),
                     );
                   }).toList(),
                   underline: SizedBox.shrink(),
@@ -83,7 +79,7 @@ class _SettingsTabState extends State<SettingsTab> {
           ),
           Text(
             StringsManager.language,
-            style: Theme.of(context).textTheme.labelSmall,
+            style: AppLightStyles.settingsItemLabelTextStyle,
           ),
           SizedBox(
             height: 8,
@@ -103,10 +99,7 @@ class _SettingsTabState extends State<SettingsTab> {
               children: [
                 Text(
                   selectedLanguage ?? '',
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                    fontWeight: FontWeight.w400,
-                    color: Theme.of(context).primaryColor,
-                  ),
+                  style: AppLightStyles.itemViewStyle,
                 ),
                 Spacer(),
                 DropdownButton<String>(
@@ -125,7 +118,7 @@ class _SettingsTabState extends State<SettingsTab> {
                   ].map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
-                      child: Text(value),
+                      child: Text(value,style: AppLightStyles.dropDownItemStyle,),
                     );
                   }).toList(),
                   underline: SizedBox.shrink(),
