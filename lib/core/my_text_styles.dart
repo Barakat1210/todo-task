@@ -34,6 +34,10 @@ class AppLightStyles {
       fontSize: 12, fontWeight: FontWeight.w400, color: ColorsManager.lightDateColor);
   static TextStyle? itemViewStyle = GoogleFonts.inter(
       fontSize: 16, fontWeight: FontWeight.w400, color: ColorsManager.blueColor);
+  static TextStyle? selectedCalenderDay = GoogleFonts.roboto(
+      fontSize: 16, fontWeight: FontWeight.w500, color: ColorsManager.blueColor);
+  static TextStyle? unselectedCalenderDay = GoogleFonts.roboto(
+      fontSize: 14, fontWeight: FontWeight.w500, color: ColorsManager.black);
   // TextStyle(
 }
 class AppDarkStyles {
@@ -62,6 +66,7 @@ static TextStyle? TaskTitleStyle = GoogleFonts.poppins(
     fontSize: 18, fontWeight: FontWeight.w700, color: ColorsManager.blueColor);
 static TextStyle? dateStyle = GoogleFonts.poppins(
     fontSize: 12, fontWeight: FontWeight.w400, color: ColorsManager.whiteColor);
+
 static TextStyle? dropDownItemStyle = GoogleFonts.poppins(
     fontSize: 12, fontWeight: FontWeight.w400, color: ColorsManager.whiteColor);
 static TextStyle? itemViewStyle = GoogleFonts.inter(

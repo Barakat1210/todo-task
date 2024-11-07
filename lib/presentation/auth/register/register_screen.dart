@@ -1,10 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:todo_app/core/assets_mamager.dart';
+import 'package:todo_app/core/constant_manager.dart';
 import 'package:todo_app/core/reusable_component/custom_text_form_field.dart';
 import 'package:todo_app/core/routes_manager.dart';
 import 'package:todo_app/core/strings_manager.dart';
+import 'package:todo_app/core/utils/dialog_utils.dart';
+import 'package:todo_app/database_manager/model/userdm.dart';
 
 class RegisterScreen extends StatelessWidget {
   RegisterScreen({super.key});
@@ -65,7 +70,9 @@ class RegisterScreen extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          signUp(context);
+                        },
                         child: const Text(
                           StringsManager.signUp,
                           style: TextStyle(
@@ -87,13 +94,20 @@ class RegisterScreen extends StatelessWidget {
                             color: Colors.white,
                           ),
                         ),
-                        TextButton(onPressed: () {
-                          Navigator.pushReplacementNamed(context, RoutesManager.loginRoute);
-                        }, child: Text(StringsManager.signIn,style: TextStyle(
-                          fontWeight: FontWeight.normal,
-                          fontSize: 20,
-                          color: Colors.white,decoration: TextDecoration.underline,
-                        ),)),
+                        TextButton(
+                            onPressed: () {
+                              Navigator.pushReplacementNamed(
+                                  context, RoutesManager.loginRoute);
+                            },
+                            child: Text(
+                              StringsManager.signIn,
+                              style: TextStyle(
+                                fontWeight: FontWeight.normal,
+                                fontSize: 20,
+                                color: Colors.white,
+                                decoration: TextDecoration.underline,
+                              ),
+                            )),
                       ],
                     ),
                   ),
@@ -179,4 +193,52 @@ class RegisterScreen extends StatelessWidget {
           ),
         ),
       );
+
+  void signUp(context) async {
+    try {
+      DialogUtils.showLoadingDialog(context, message: 'Loading...');
+      final credential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+      UserDM user = UserDM(
+          id: credential.user!.uid,
+          fullName: fullNameController.text,
+          userName: userNameController.text,
+          email: emailController.text);
+      addUserToFireStore(user);
+      DialogUtils.hideDialog(context);
+      DialogUtils.showMessageDialog(context,
+          content: 'user register successfully',
+          posActionTitle: 'Ok', posAction: () {
+        Navigator.pushReplacementNamed(context, RoutesManager.loginRoute);
+      });
+    } on FirebaseAuthException catch (authError) {
+      DialogUtils.hideDialog(context);
+      String message;
+      if (authError.code == AppConstants.weakPassword) {
+        message = AppConstants.weakPasswordMessage;
+      } else if (authError.code == AppConstants.emailAlreadyInUse) {
+        message = AppConstants.emailInUseMessage;
+      } else {
+        message = AppConstants.SomeThingwentWrongMessage;
+      }
+      DialogUtils.showMessageDialog(context,
+          title: 'Error', content: message, posActionTitle: 'Ok');
+    } catch (e) {
+      DialogUtils.hideDialog(context);
+      DialogUtils.showMessageDialog(context,
+          title: 'Error', content: e.toString(), posActionTitle: 'Ok');
+    }
+  }
+
+  void addUserToFireStore(UserDM user) async {
+    CollectionReference collectionReference =
+        FirebaseFirestore.instance.collection(UserDM.collectionName);
+    DocumentReference newUserDoc = collectionReference.doc(user.id);
+    newUserDoc.set(
+      await user.toFireStore(),
+    );
+  }
 }

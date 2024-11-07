@@ -9,10 +9,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       onGenerateRoute:RoutesManager.router ,
-      initialRoute:RoutesManager.homeRoute ,
+      initialRoute:RoutesManager.loginRoute ,
       theme:MyTheme.light ,
       darkTheme:MyTheme.dark ,
-      themeMode:ThemeMode.dark ,
+      themeMode:ThemeMode.light ,
     );
   }
 }
