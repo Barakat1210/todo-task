@@ -6,16 +6,23 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:todo_app/core/assets_mamager.dart';
 import 'package:todo_app/core/reusable_component/custom_text_form_field.dart';
 import 'package:todo_app/core/routes_manager.dart';
-import 'package:todo_app/core/strings_manager.dart';
 import 'package:todo_app/database_manager/model/userdm.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../core/constant_manager.dart';
 import '../../../core/utils/dialog_utils.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   TextEditingController passwordController = TextEditingController();
+
   TextEditingController emailController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,7 +40,7 @@ class LoginScreen extends StatelessWidget {
                 slivers: [
                   SliverToBoxAdapter(
                     child: Text(
-                      StringsManager.email,
+                      AppLocalizations.of(context)!.email,
                       style: GoogleFonts.poppins(
                         fontWeight: FontWeight.w300,
                         fontSize: 20,
@@ -44,7 +51,7 @@ class LoginScreen extends StatelessWidget {
                   buildEmailField(),
                   SliverToBoxAdapter(
                     child: Text(
-                      StringsManager.password,
+                      AppLocalizations.of(context)!.password,
                       style: GoogleFonts.poppins(
                         fontWeight: FontWeight.w300,
                         fontSize: 20,
@@ -71,7 +78,7 @@ class LoginScreen extends StatelessWidget {
                           signIn(context);
                         },
                         child: Text(
-                          StringsManager.signIn,
+                          AppLocalizations.of(context)!.sign_in,
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w600,
@@ -84,7 +91,7 @@ class LoginScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Do not  have Account?',
+                          AppLocalizations.of(context)!.dont_have_account,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             fontSize: 14,
@@ -97,7 +104,7 @@ class LoginScreen extends StatelessWidget {
                                   context, RoutesManager.registerRoute);
                             },
                             child: Text(
-                              StringsManager.signUp,
+                              AppLocalizations.of(context)!.sign_up,
                               style: TextStyle(
                                 fontWeight: FontWeight.normal,
                                 fontSize: 20,
@@ -119,7 +126,7 @@ class LoginScreen extends StatelessWidget {
 
   Widget buildEmailField() => SliverToBoxAdapter(
         child: CustomTextFormField(
-          hintText: 'enter your E-mail address',
+          hintText: AppLocalizations.of(context)!.enter_your_email,
           validator: (input) {
             if (input == null || input.trim().isEmpty) {
               return 'Plz,enter E-mail address';
@@ -128,8 +135,9 @@ class LoginScreen extends StatelessWidget {
           controller: emailController,
         ),
       );
+
   Widget buildPasswordField() => CustomTextFormField(
-        hintText: 'enter your password',
+        hintText:AppLocalizations.of(context)!.enter_your_password,
         validator: (input) {
           if (input == null || input.trim().isEmpty) {
             return 'Plz,enter password';
@@ -141,6 +149,7 @@ class LoginScreen extends StatelessWidget {
         controller: passwordController,
         isSecure: true,
       );
+
   void signIn(context) async {
     try {
       DialogUtils.showLoadingDialog(context, message: 'Loading...');
@@ -148,11 +157,11 @@ class LoginScreen extends StatelessWidget {
         email: emailController.text,
         password: passwordController.text,
       );
-      UserDM.userDM=await getUserFromFireStore(credential.user!.uid);
+      UserDM.userDM = await getUserFromFireStore(credential.user!.uid);
       DialogUtils.hideDialog(context);
       DialogUtils.showMessageDialog(context,
-          content: 'user login successfully',
-          posActionTitle: 'Ok', posAction: () {
+          content: AppLocalizations.of(context)!.user_login_successfully,
+          posActionTitle: AppLocalizations.of(context)!.ok, posAction: () {
         Navigator.pushReplacementNamed(context, RoutesManager.homeRoute);
       });
     } on FirebaseAuthException catch (authError) {
@@ -166,20 +175,20 @@ class LoginScreen extends StatelessWidget {
         message = AppConstants.SomeThingwentWrongMessage;
       }
       DialogUtils.showMessageDialog(context,
-          title: 'Error', content: message, posActionTitle: 'Ok');
+          title: 'Error', content: message, posActionTitle: AppLocalizations.of(context)!.ok);
     } catch (e) {
       DialogUtils.hideDialog(context);
       DialogUtils.showMessageDialog(context,
-          title: 'Error', content: e.toString(), posActionTitle: 'Ok');
+          title: 'Error', content: e.toString(), posActionTitle: AppLocalizations.of(context)!.ok);
     }
   }
 
-  Future<UserDM>getUserFromFireStore(String uid) async{
+  Future<UserDM> getUserFromFireStore(String uid) async {
     CollectionReference collectionReference =
         FirebaseFirestore.instance.collection(UserDM.collectionName);
-    DocumentReference userDoc=collectionReference.doc(uid);
-    DocumentSnapshot documentSnapshot=await userDoc.get();
-    var json=documentSnapshot.data() as Map<String,dynamic>;
+    DocumentReference userDoc = collectionReference.doc(uid);
+    DocumentSnapshot documentSnapshot = await userDoc.get();
+    var json = documentSnapshot.data() as Map<String, dynamic>;
     return UserDM.fromFireStore(json);
   }
 }

@@ -10,14 +10,25 @@ import 'package:todo_app/core/routes_manager.dart';
 import 'package:todo_app/core/strings_manager.dart';
 import 'package:todo_app/core/utils/dialog_utils.dart';
 import 'package:todo_app/database_manager/model/userdm.dart';
-
-class RegisterScreen extends StatelessWidget {
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+class RegisterScreen extends StatefulWidget {
   RegisterScreen({super.key});
+
+  @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController fullNameController = TextEditingController();
+
   TextEditingController userNameController = TextEditingController();
+
   TextEditingController passwordController = TextEditingController();
+
   TextEditingController rePasswordController = TextEditingController();
+
   TextEditingController emailController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,25 +44,25 @@ class RegisterScreen extends StatelessWidget {
             Expanded(
               child: CustomScrollView(
                 slivers: [
-                  buildTitleItem(StringsManager.fullName),
+                  buildTitleItem(AppLocalizations.of(context)!.full_name),
                   buildFullNameField(),
-                  buildTitleItem(StringsManager.UserName),
+                  buildTitleItem(AppLocalizations.of(context)!.user_name),
                   // SliverToBoxAdapter(
                   //   child: SizedBox(
                   //     height: 8,
                   //   ),
                   // ),
                   buildUserNameField(),
-                  buildTitleItem(StringsManager.email),
+                  buildTitleItem(AppLocalizations.of(context)!.email),
                   // SliverToBoxAdapter(
                   //   child: SizedBox(
                   //     height: 8,
                   //   ),
                   // ),
                   buildEmailField(),
-                  buildTitleItem(StringsManager.password),
+                  buildTitleItem(AppLocalizations.of(context)!.password),
                   buildPasswordField(),
-                  buildTitleItem(StringsManager.passwordConfirm),
+                  buildTitleItem(AppLocalizations.of(context)!.re_password),
                   // SliverToBoxAdapter(
                   //   child: SizedBox(
                   //     height: 8,
@@ -73,8 +84,8 @@ class RegisterScreen extends StatelessWidget {
                         onPressed: () {
                           signUp(context);
                         },
-                        child: const Text(
-                          StringsManager.signUp,
+                        child:  Text(
+                          AppLocalizations.of(context)!.sign_up,
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w600,
@@ -87,7 +98,7 @@ class RegisterScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Already have Account?',
+                          AppLocalizations.of(context)!.already_have_account,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             fontSize: 14,
@@ -100,7 +111,7 @@ class RegisterScreen extends StatelessWidget {
                                   context, RoutesManager.loginRoute);
                             },
                             child: Text(
-                              StringsManager.signIn,
+                              AppLocalizations.of(context)!.sign_in,
                               style: TextStyle(
                                 fontWeight: FontWeight.normal,
                                 fontSize: 20,
@@ -122,7 +133,7 @@ class RegisterScreen extends StatelessWidget {
 
   Widget buildFullNameField() => SliverToBoxAdapter(
         child: CustomTextFormField(
-          hintText: 'enter your Full name',
+          hintText: AppLocalizations.of(context)!.enter_your_full_name,
           validator: (input) {
             if (input == null || input.trim().isEmpty) {
               return 'Plz,enter Full name';
@@ -131,9 +142,10 @@ class RegisterScreen extends StatelessWidget {
           controller: fullNameController,
         ),
       );
+
   Widget buildUserNameField() => SliverToBoxAdapter(
         child: CustomTextFormField(
-          hintText: 'enter your user name',
+          hintText: AppLocalizations.of(context)!.enter_your_user_name,
           validator: (input) {
             if (input == null || input.trim().isEmpty) {
               return 'Plz,enter user name';
@@ -142,9 +154,10 @@ class RegisterScreen extends StatelessWidget {
           controller: userNameController,
         ),
       );
+
   Widget buildEmailField() => SliverToBoxAdapter(
         child: CustomTextFormField(
-          hintText: 'enter your E-mail address',
+          hintText: AppLocalizations.of(context)!.enter_your_email,
           validator: (input) {
             if (input == null || input.trim().isEmpty) {
               return 'Plz,enter E-mail address';
@@ -153,9 +166,10 @@ class RegisterScreen extends StatelessWidget {
           controller: emailController,
         ),
       );
+
   Widget buildPasswordField() => SliverToBoxAdapter(
         child: CustomTextFormField(
-          hintText: 'enter your password',
+          hintText: AppLocalizations.of(context)!.enter_your_password,
           validator: (input) {
             if (input == null || input.trim().isEmpty) {
               return 'Plz,enter password';
@@ -168,9 +182,10 @@ class RegisterScreen extends StatelessWidget {
           isSecure: true,
         ),
       );
+
   Widget buildConfirmPasswordField() => SliverToBoxAdapter(
         child: CustomTextFormField(
-          hintText: 'Confirm password',
+          hintText: AppLocalizations.of(context)!.re_password,
           validator: (input) {
             if (input == null || input.trim().isEmpty) {
               return 'Plz,confirm password';
@@ -183,6 +198,7 @@ class RegisterScreen extends StatelessWidget {
           isSecure: true,
         ),
       );
+
   buildTitleItem(String title) => SliverToBoxAdapter(
         child: Text(
           title,

@@ -36,7 +36,7 @@ class TasksTabState extends State<TasksTab> {
                   )),
                   Expanded(
                       child: Container(
-                    color: ColorsManager.lightScaffoldBgColor,
+                    color: Theme.of(context).colorScheme.primary,
                   )),
                 ],
               ),
@@ -102,7 +102,7 @@ class TasksTabState extends State<TasksTab> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
-              color: ColorsManager.whiteColor,
+              color: Theme.of(context).indicatorColor,
               elevation: 12,
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -110,8 +110,8 @@ class TasksTabState extends State<TasksTab> {
                     Text(
                       '${date.dayName}',
                       style: isSelected
-                          ? AppLightStyles.selectedCalenderDay
-                          : AppLightStyles.unselectedCalenderDay,
+                          ? AppLightStyles.selectedCalenderDay?.copyWith(color: Theme.of(context).primaryColor)
+                          : AppLightStyles.unselectedCalenderDay?.copyWith(color: Theme.of(context).colorScheme.onPrimary),
                     ),
                     SizedBox(
                       height: 2,
@@ -119,8 +119,8 @@ class TasksTabState extends State<TasksTab> {
                     Text(
                       '${date.day}',
                       style: isSelected
-                          ? AppLightStyles.selectedCalenderDay
-                          : AppLightStyles.unselectedCalenderDay,
+                          ? AppLightStyles.selectedCalenderDay?.copyWith(color: Theme.of(context).primaryColor)
+                          : AppLightStyles.unselectedCalenderDay?.copyWith(color: Theme.of(context).colorScheme.onPrimary)
                     ),
                   ]),
             ),

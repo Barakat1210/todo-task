@@ -12,6 +12,7 @@ static const String email='E-mail';
 static const String fullName='Full Name';
 static const String UserName='User Name';
 static const String passwordConfirm='Confirm Password';
+static const String editTitle='Edit Task';
 
 
 }
