@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:todo_app/core/colors_manager.dart';
 import 'package:todo_app/core/my_text_styles.dart';
 import 'package:todo_app/core/utils/date_utils.dart';
 import 'package:todo_app/database_manager/model/todo_dm.dart';
 import 'package:todo_app/database_manager/model/userdm.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class AddTaskBottomSheet extends StatefulWidget {
   AddTaskBottomSheet({super.key});
   @override
@@ -18,6 +20,7 @@ class AddTaskBottomSheet extends StatefulWidget {
             ));
   }
 }
+
 class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   DateTime userSelectedDate = DateTime.now();
   TextEditingController titleController = TextEditingController();
@@ -33,9 +36,14 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text('Add new task',
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.headlineMedium),
+            Text(
+              AppLocalizations.of(context)!.add_new_task,
+              textAlign: TextAlign.center,
+              style: Theme.of(context)
+                  .textTheme
+                  .headlineMedium
+                  ?.copyWith(color: Theme.of(context).colorScheme.onPrimary),
+            ),
             SizedBox(
               height: 8,
             ),
@@ -48,8 +56,9 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
               },
               controller: titleController,
               decoration: InputDecoration(
-                hintText: 'Enter task title',
-                hintStyle: AppLightStyles.greyStyle,
+                hintText: AppLocalizations.of(context)!.enter_task_title,
+                hintStyle: AppLightStyles.greyStyle
+                    ?.copyWith(color: Theme.of(context).colorScheme.onPrimary),
               ),
             ),
             SizedBox(
@@ -64,16 +73,18 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
               },
               controller: descriptionController,
               decoration: InputDecoration(
-                hintText: 'Enter task description',
+                hintText: AppLocalizations.of(context)!.enter_task_description,
+                hintStyle: AppLightStyles.greyStyle
+                    ?.copyWith(color: Theme.of(context).colorScheme.onPrimary),
               ),
             ),
             SizedBox(
               height: 12,
             ),
-            Text(
-              'Select Date',
-              style: AppLightStyles.greyStyle?.copyWith(color: Colors.black),
-            ),
+            Text(AppLocalizations.of(context)!.select_date,
+                style: AppLightStyles.greyStyle?.copyWith(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                )),
             SizedBox(
               height: 8,
             ),
@@ -84,15 +95,32 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
               child: Text(
                 userSelectedDate.toFormattedDate,
                 textAlign: TextAlign.center,
-                style: AppLightStyles.greyStyle,
+                style: AppLightStyles.greyStyle?.copyWith(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                ),
               ),
             ),
             Spacer(),
-            ElevatedButton(
-                onPressed: () {
-                  addTodoToFireStore();
-                },
-                child: Text('Add task')),
+            Container(
+              width: 100,
+              height: 52,
+              decoration: BoxDecoration(
+                color: ColorsManager.blueColor,
+                borderRadius: BorderRadius.circular(25),
+              ),
+              child: ElevatedButton(
+                  onPressed: () {
+                    addTodoToFireStore();
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: ColorsManager.blueColor,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25)),
+                      minimumSize: Size(25, 50)),
+                  child: Text(
+                    AppLocalizations.of(context)!.add_task_button,
+                  )),
+            ),
           ],
         ),
       ),
@@ -125,15 +153,15 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
     doc
         .set(todo.toJson())
         .then((value) {
-      //Navigator.pop(context);
-    })
+          //Navigator.pop(context);
+        })
         .onError(
           (error, stackTrace) {},
         )
         .timeout(Duration(microseconds: 500), onTimeout: () {
-      if (mounted) {
-        Navigator.pop(context);
-      }
-    });
+          if (mounted) {
+            Navigator.pop(context);
+          }
+        });
   }
 }

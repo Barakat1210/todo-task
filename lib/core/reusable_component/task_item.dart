@@ -1,17 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:todo_app/core/routes_manager.dart';
 import 'package:todo_app/core/utils/dialog_utils.dart';
 import 'package:todo_app/database_manager/model/todo_dm.dart';
 import 'package:todo_app/database_manager/model/userdm.dart';
-import 'package:todo_app/presentation/screens/home/add_task_bottom_sheet/edit_task_bottom.dart';
-import '../colors_manager.dart';
 import '../my_text_styles.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TaskItem extends StatefulWidget {
   final TodoDM todo;
   final Function onDeletedTask;
-
   TaskItem({super.key, required this.todo, required this.onDeletedTask});
 
   @override
@@ -39,7 +38,7 @@ class _TaskItemState extends State<TaskItem> {
               backgroundColor: const Color(0xFFFE4A49),
               foregroundColor: Colors.white,
               icon: Icons.delete,
-              label: 'Delete',
+              label: AppLocalizations.of(context)!.delete,
             ),
           ],
         ),
@@ -53,11 +52,12 @@ class _TaskItemState extends State<TaskItem> {
               backgroundColor: Theme.of(context).primaryColor,
               foregroundColor: Colors.white,
               icon: Icons.edit,
-              label: 'Edit',
+              label: AppLocalizations.of(context)!.edit,
             ),
           ],
         ),
         child: Card(
+          color: Colors.transparent,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
             child: Row(
@@ -85,10 +85,17 @@ class _TaskItemState extends State<TaskItem> {
                       const SizedBox(height: 12),
                       Row(
                         children: [
-                          const Icon(Icons.punch_clock),
+                          Icon(
+                            Icons.punch_clock,
+                            color: Theme.of(context).iconTheme.color,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
                           Text(
                             '${widget.todo.date.hour}:${widget.todo.date.minute}:${widget.todo.date.second}',
-                            style: AppLightStyles.DateStyle,
+                            style: AppLightStyles.DateStyle?.copyWith(
+                                color: Theme.of(context).colorScheme.onPrimary),
                           ),
                         ],
                       ),
@@ -96,7 +103,8 @@ class _TaskItemState extends State<TaskItem> {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 12),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 2, horizontal: 12),
                   decoration: BoxDecoration(
                     color: Theme.of(context).primaryColor,
                     borderRadius: BorderRadius.circular(10),
@@ -118,12 +126,14 @@ class _TaskItemState extends State<TaskItem> {
   Future<void> showDeleteDialog() async {
     DialogUtils.showMessageDialog(
       context,
-      content: 'Are you sure you want to delete this task?',
-      posActionTitle: 'Yes',
-      negActionTitle: 'No',
+      content: AppLocalizations.of(context)!
+          .are_you_sure_you_want_to_delete_this_task,
+      posActionTitle: AppLocalizations.of(context)!.yes,
+      negActionTitle: AppLocalizations.of(context)!.no,
       posAction: () {
         deleteTask();
-        widget.onDeletedTask();
+        widget.onDeletedTask(); // Notify parent widget that task was deleted
+        Navigator.pop(context);
       },
     );
   }
@@ -131,23 +141,32 @@ class _TaskItemState extends State<TaskItem> {
   Future<void> showEditDialog() async {
     DialogUtils.showMessageDialog(
       context,
-      content: 'Do you want to edit this task?',
-      posActionTitle: 'Yes',
-      negActionTitle: 'No',
-      posAction: () {
-        EditTaskBottomSheet.show(
+      content: AppLocalizations.of(context)!.do_you_want_to_edit_this_task,
+      posActionTitle: AppLocalizations.of(context)!.yes,
+      negActionTitle: AppLocalizations.of(context)!.no,
+      posAction: () async {
+        final update = await Navigator.pushNamed(
           context,
-          widget.todo.id,
-          widget.todo.title,
-          widget.todo.description,
-          widget.todo.date,
-        ).then((_) {
-          setState(() {}); // تحديث الحالة بعد التحرير
-        });
+          RoutesManager.editRoute,
+          arguments: {
+            'taskId': widget.todo.id,
+            'title': widget.todo.title,
+            'description': widget.todo.description,
+            'date': widget.todo.date,
+          },
+        );
+        if (update == true) {
+          setState(() {
+            Navigator.pop(
+                context, true); // Close the dialog and refresh the task list
+          });
+        }
+      },
+      negAction: () {
+        Navigator.pop(context); // Just close the dialog if not editing
       },
     );
   }
-
   Future<void> deleteTask() async {
     try {
       var tasksCollection = FirebaseFirestore.instance

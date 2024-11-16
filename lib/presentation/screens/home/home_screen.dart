@@ -4,6 +4,7 @@ import '../../../core/strings_manager.dart';
 import '../tabs/settings_tab/settings_tab.dart';
 import '../tabs/tasks_tab/tasks_tab.dart';
 import 'add_task_bottom_sheet/add_task_bottom_sheet.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({super.key});
@@ -35,17 +36,16 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: buildFab(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       appBar: AppBar(
-        title: Text(StringsManager.appBarTitle),
+        title: Text(AppLocalizations.of(context)!.to_do_list),
         elevation: 0,
       ),
       bottomNavigationBar: BottomAppBar(
-        notchMargin: 8,
+        notchMargin: 4,
         child: buildBottomNavigationBar(),
       ),
       body: tabs[selectedIndex],
     );
   }
-
   Widget buildFab() {
     return FloatingActionButton(
       onPressed: () {
@@ -58,15 +58,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget buildBottomNavigationBar() {
     return BottomNavigationBar(
-      backgroundColor: Colors.transparent,
+
       elevation: 0,
       currentIndex: selectedIndex,
       onTap: onBottomNavBarTabClicked,
       items: [
         BottomNavigationBarItem(
-            icon: Icon(Icons.list), label: StringsManager.listLabel),
+            icon: Icon(Icons.list), label: AppLocalizations.of(context)!.tasks),
         BottomNavigationBarItem(
-            icon: Icon(Icons.settings), label: StringsManager.settingsLabel),
+            icon: Icon(Icons.settings), label: AppLocalizations.of(context)!.settings),
       ],
     );
   }
