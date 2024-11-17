@@ -133,8 +133,11 @@ class _TaskItemState extends State<TaskItem> {
       posAction: () {
         deleteTask();
         widget.onDeletedTask(); // Notify parent widget that task was deleted
-        Navigator.pop(context);
+
       },
+      negAction: (){
+
+      }
     );
   }
 
